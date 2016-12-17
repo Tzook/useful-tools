@@ -1,0 +1,19 @@
+$called-once-files: () !default;
+
+// Makes sure that a file will be only imported once and thus will never duplicate selectors.
+// The name variable MUST be unique. Before using this function, make sure that the name you are assigning has NOT been used yet.
+// @usage:
+//  @if (import-once('discoveryhub_sprite') == true) {
+//      .discoveryhub_sprite {
+//          @include background-image('Sprites', 'discoveryhub_sprite.png');
+//      }
+//  }
+@function call-once($name) {
+    @if index($called-once-files, $name) != null {
+        // already has been imported
+        @return false;
+    }
+    // mark the imported file as imported, so it won't be loaded twice
+    $called-once-files: append($called-once-files, $name) !global;
+    @return true;
+}

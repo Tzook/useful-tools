@@ -6,6 +6,12 @@
 //     console.info(newPath.join("."), args);
 // }, [console]);
 
+/**
+ * Inserts a callback before any function
+ * @param {Function} cb The callback to insert
+ * @param {*[]} skipObjects List of blacklisted objects to ignore
+ * @param {Object=} initialScope The parent object to start processing functions nestingly. Defaults to Window.
+ */
 function runBeforeFunctions(cb, skipObjects, intialScope) {
     var functionsHandled = new Map();
     

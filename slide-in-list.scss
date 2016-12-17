@@ -1,41 +1,41 @@
-//	slide-in-list
+//    slide-in-list
 //
-//	Animates a list of items one by one in a progressive manner
+//    Animates a list of items one by one in a progressive manner
 //
-//	@usage:
+//    @usage:
 //
-//	.{class_name_here} {
-//		@include slide-in-list(0.5);
-//	} 
-//	@include keyframes-delay();
-//	@include keyframes-slide();
+//    .{class_name_here} {
+//    	@include slide-in-list(0.5);
+//    } 
+//    @include keyframes-delay();
+//    @include keyframes-slide();
 //
 
 @mixin slide-in-list($timing, $count: 10, $delay: 0.1, $initialDelay: 0.2) {
-	$timing: #{$timing}s;
-	display: block;
-	@for $i from 1 through $count {
-		$currentDelay: #{$initialDelay + ($i - 1) * $delay}s;
-		&:nth-of-type(#{$count}n + #{$i}) {
-			animation: delay $currentDelay, slide $timing $currentDelay;
-		}
-	}
+    $timing: #{$timing}s;
+    display: block;
+    @for $i from 1 through $count {
+        $currentDelay: #{$initialDelay + ($i - 1) * $delay}s;
+        &:nth-of-type(#{$count}n + #{$i}) {
+            animation: delay $currentDelay, slide $timing $currentDelay;
+        }
+    }
 }
 @mixin keyframes-delay() {
-	@keyframes delay {
-		0% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 0;
-		}
-	}
+    @keyframes delay {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
 }
 @mixin keyframes-slide($slideLength: -30px) {
-	@keyframes slide {
-		0% {
-			transform: translateY($slideLength);
-			opacity: 0;
-		}
-	}
+    @keyframes slide {
+        0% {
+            transform: translateY($slideLength);
+            opacity: 0;
+        }
+    }
 }

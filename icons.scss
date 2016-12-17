@@ -1,0 +1,96 @@
+%create-pseudo-elements {
+    &:after,
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+    }
+}
+
+// Magnifying glass
+//
+//   @usage
+//
+//   <div class="my_class"></div>
+//
+//   .my_class {
+//       @include magnifying-glass(white, 18px);
+//   }
+
+@mixin magnifying-glass($border-color, $size: 18px) {
+    @extend %create-pseudo-elements;
+    $line-height: $size / 2 + 1px;
+
+    display: block;
+
+    @if ($isLtr) {
+        transform: rotate(-45deg);
+        transform-origin: $size / 2 $size / 2; // rotate around the center of the circle
+    } @else {
+        transform: rotate(45deg);
+        transform-origin: calc(100% - #{$size / 2}) $size / 2; // rotate around the center of the circle
+    }
+
+    // the circle
+    &:after {
+        width: $size;
+        height: $size;
+        border: 2px solid $border-color;
+        border-radius: 100%;
+    }
+
+    // the line
+    &:before {
+        width: 0;
+        height: $line-height;
+        top: $size;
+        #{$start}: $size / 2 - 1px; // center the line
+        border: 1px solid $border-color;
+        border-radius: 20%;
+    }
+}
+
+// Filter
+//
+//   @usage
+//
+//   <div class="my_class"></div>
+//
+//   .my_class {
+//       @include filter(white, blue, 12px);
+//   }
+@mixin filter($border-color, $background-color, $size: 12px) {
+    @extend %create-pseudo-elements;
+
+    // white triangle
+    border-#{$end}: $size solid transparent;
+    border-#{$start}: $size solid transparent;
+    border-top: $size + 2px solid $border-color;
+    position: relative;
+    #{$end}: 0;
+
+    // transparent triangle inside the white triangle
+    &:after {
+        border-#{$end}: $size - 4px solid transparent;
+        border-#{$start}: $size - 4px solid transparent;
+        border-top: $size - 3px solid $background-color;
+        top: -$size;
+        #{$end}: -($size - 4px);
+    }
+
+    // filter bottom
+    &:before {
+        width: 6px;
+        border: 2px solid $border-color;
+        border-top: 0;
+        height: 14px;
+        background: $background-color;
+        #{$end}: -3px;
+        top: -8px;
+        @if ($isLtr) {
+            transform: skewY(-45deg);
+        } @else {
+            transform: skewY(45deg);
+        }
+    }
+}

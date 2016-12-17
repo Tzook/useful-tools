@@ -89,3 +89,54 @@
         };
     };
 })(window.accesibility = window.accesibility || {});
+
+
+// SPEC:
+describe('accessibility package - Highlighter', function () {
+    var highlighter,
+        $body,
+        doc;
+
+    beforeEach(function () {
+        $body = jQuery('<div></div>');
+        doc = {activeElement: jasmine.createSpyObj('activeElement', ['blur'])};
+        highlighter = new window.accessibility.Highlighter();
+        highlighter.init($body, doc);
+    });
+
+    describe('init', function () {
+        it('should not do anything to body if on init', function() {
+            expect($body[0].className).toBe('');
+        });
+        it('should add class to body on focus', function () {
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            expect($body[0].className).toBe('tab_focus');
+        });
+
+        it('should remove the class after mouse movement', function() {
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            $body.mousemove();
+            expect($body[0].className).toBe('');
+        });
+
+        it('should add the class again after mouse movement and clicking tab', function() {
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            $body.mousemove();
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            expect($body[0].className).toBe('tab_focus');
+        });
+
+        it('should still have the class after clicking tab multiple times', function() {
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            expect($body[0].className).toBe('tab_focus');
+        });
+
+        it('should blur when clicking esc', function() {
+            $body.trigger(jQuery.Event('keyup', {which: 9}));
+            $body.trigger(jQuery.Event('keyup', {which: 27}));
+            expect(doc.activeElement.blur).toHaveBeenCalled();
+            expect($body[0].className).toBe('');
+        });
+    });
+});
